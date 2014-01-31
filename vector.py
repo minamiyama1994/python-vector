@@ -15,11 +15,18 @@ class vector:
 
     def __mul__(self, o):
         if isinstance(o,vector):
-            if len(o.v) < len(self.v): o.v += [0 for x in range(len(self.v)-len(o.v))]
-            elif len(o.v) > len(self.v): self.v += [0 for x in range(len(o.v)-len(self.v))]
-            return sum([self.v[i] * o.v[i] for i in range(len(o.v))])
+            if len(o.v) < len(self.v):
+                return self * vector ( o.v + [0 for x in range(len(self.v)-len(o.v))] )
+            elif len(o.v) > len(self.v):
+                return vector ( self.v + [0 for x in range(len(o.v)-len(self.v))] ) * o
+            else:
+                return sum([self.v[i] * o.v[i] for i in range(len(o.v))])
         else:
-            return map(lambda x: x*o, self.v)
+            return vector(map(lambda x: x*o, self.v))
+
+    def __rmul__(self, o):
+        return self.__mul__(o)
+            
 
     def __str__(self):
         return str(self.v)
